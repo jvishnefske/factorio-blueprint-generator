@@ -1,4 +1,8 @@
-# Factorio Blueprint Optimizer (Work in Progress)
+# Factorio Blueprint Optimizer ⚙️ (Work in Progress 🚧)
+
+![Work in Progress](https://img.shields.io/badge/Status-Work%20in%20Progress-red)
+![Python](https://img.shields.io/badge/python-3.9+-blue.svg)
+![Factorio](https://img.shields.io/badge/Factorio-Optimized-orange)
 
 This project aims to develop an optimizer for Factorio factory layouts using a simulated annealing approach.
 
