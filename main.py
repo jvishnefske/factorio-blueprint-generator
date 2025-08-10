@@ -280,15 +280,17 @@ class BlueprintExporter:
             if entity_instance.position is None:
                 continue
             
-            new_entity = Entity(
-                name=entity_instance.entity_type_id,
-                position=DraftsmanPosition(x=entity_instance.position.x, y=entity_instance.position.y),
-                direction=entity_instance.direction.value,
-            )
+            # Use blueprint.new_entity() to correctly instantiate and add the entity
+            # This method handles the underlying Entity.__init__ complexities.
+            new_entity_args = {
+                "name": entity_instance.entity_type_id,
+                "position": DraftsmanPosition(x=entity_instance.position.x, y=entity_instance.position.y),
+                "direction": entity_instance.direction.value,
+            }
             if entity_instance.recipe_id:
-                new_entity.recipe = entity_instance.recipe_id
+                new_entity_args["recipe"] = entity_instance.recipe_id
             
-            blueprint.entities.append(new_entity)
+            blueprint.new_entity(**new_entity_args)
             
         return blueprint.to_string()
 
