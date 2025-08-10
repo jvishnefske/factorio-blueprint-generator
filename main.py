@@ -15,13 +15,13 @@ from models import (
 
 # Import the factorio-draftsman library for the final export step
 try:
-    from draftsman.blueprint import Blueprint
+    from draftsman.blueprintable import Blueprint
     from draftsman.entity import Entity
-    from draftsman.classes.position import Position as DraftsmanPosition
+    from draftsman.signatures import IntPosition as DraftsmanPosition
     DRAFTSMAN_INSTALLED = True
-except ImportError:
+except ImportError as e:
     DRAFTSMAN_INSTALLED = False
-    print("Warning: factorio-draftsman is not installed. Blueprint export will be skipped.")
+    print("Warning: factorio-draftsman is not installed. Blueprint export will be skipped.", e)
     print("Install it with: pip install factorio-draftsman")
 
 
