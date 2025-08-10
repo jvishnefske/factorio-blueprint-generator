@@ -299,7 +299,7 @@ class BlueprintExporter:
 # PART 3: MAIN EXECUTION
 # ==============================================================================
 
-if __name__ == "__main__":
+def main():
     # --- Setup: Create dummy game data files ---
     entity_data = {
         "assembling-machine-2": {
@@ -367,3 +367,7 @@ if __name__ == "__main__":
         print("="*60)
         print(final_blueprint_string)
         print("="*60)
+
+if __name__ == '__main__':
+    main()
+    
