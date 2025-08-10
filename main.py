@@ -360,7 +360,7 @@ def main():
     # 3. Initialize Core Modules
     print("\n--- 3. Initializing Optimization Modules ---")
     state_manager = StateManager(entity_types)
-    fitness_evaluator = FitnessEvaluator(state_manager, target_production) # Pass target_production here
+    fitness_evaluator = FitnessEvaluator(state_manager, target) # Pass target_production here
     optimizer = SimulatedAnnealingOptimizer(
         state_manager=state_manager,
         fitness_evaluator=fitness_evaluator,
