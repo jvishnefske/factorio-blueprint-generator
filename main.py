@@ -281,9 +281,10 @@ class BlueprintExporter:
                 continue
             
             # Create an Entity instance and append it to the blueprint's entities list
+            # Pass position as a dictionary, which Draftsman's internal Vector conversion often handles.
             new_entity = Entity(
                 name=entity_instance.entity_type_id,
-                position=DraftsmanPosition(x=entity_instance.position.x, y=entity_instance.position.y),
+                position={"x": entity_instance.position.x, "y": entity_instance.position.y},
                 direction=entity_instance.direction.value,
                 similar_entities=None # Required by this specific draftsman version
             )
