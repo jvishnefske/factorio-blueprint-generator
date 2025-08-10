@@ -212,14 +212,26 @@ class SimulatedAnnealingOptimizer:
 
     def optimize(self, initial_state: BlueprintState) -> BlueprintState:
         """Performs the simulated annealing optimization."""
-        # Start with a random valid placement
         current_state = copy.deepcopy(initial_state)
-        grid_size = len(current_state.entities) * 5
-        for entity in current_state.entities:
-            while True:
-                entity.position = Position(x=random.uniform(-grid_size, grid_size), y=random.uniform(-grid_size, grid_size))
-                if self.state_manager.is_state_valid(current_state):
-                    break
+        
+        # Ensure all entities have an initial random position before starting optimization
+        max_attempts = 100 # Prevent infinite loop for impossible initial placements
+        for _ in range(max_attempts):
+            temp_state = copy.deepcopy(initial_state) # Start fresh for each attempt
+            grid_size = len(temp_state.entities) * 5 # Or a fixed grid size
+            
+            for entity in temp_state.entities:
+                # Assign a random position to each entity
+                entity.position = Position(
+                    x=round(random.uniform(-grid_size, grid_size) * 2) / 2,
+                    y=round(random.uniform(-grid_size, grid_size) * 2) / 2
+                )
+            
+            if self.state_manager.is_state_valid(temp_state):
+                current_state = temp_state
+                break
+        else: # If loop completes without finding a valid initial state
+            raise RuntimeError("Could not find a valid initial placement for entities within given attempts.")
 
         current_score = self.fitness_evaluator.evaluate(current_state)
         best_state = copy.deepcopy(current_state)
