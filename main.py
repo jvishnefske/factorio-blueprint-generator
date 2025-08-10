@@ -282,7 +282,7 @@ class BlueprintExporter:
             
             new_entity = Entity(
                 name=entity_instance.entity_type_id,
-                position=DraftsmanPosition(entity_instance.position.x, entity_instance.position.y),
+                position=DraftsmanPosition(x=entity_instance.position.x, y=entity_instance.position.y),
                 direction=entity_instance.direction.value,
             )
             if entity_instance.recipe_id:
