@@ -315,6 +315,11 @@ def main():
             "type_id": "substation",
             "size": {"width": 2, "height": 2},
             "supply_area": {"width": 18, "height": 18}
+        },
+        "transport-belt": {
+            "type_id": "transport-belt",
+            "size": {"width": 1, "height": 1},
+            "power_consumption_kw": 0 # Belts don't consume power directly
         }
     }
     recipe_data = {

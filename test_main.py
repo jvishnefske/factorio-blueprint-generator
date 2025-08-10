@@ -43,6 +43,11 @@ def dummy_entity_data():
             "size": {"width": 2, "height": 2},
             "crafting_speed": 1.0,
             "power_consumption_kw": 90
+        },
+        EntityTypeID("transport-belt"): {
+            "type_id": EntityTypeID("transport-belt"),
+            "size": {"width": 1, "height": 1},
+            "power_consumption_kw": 0
         }
     }
 
