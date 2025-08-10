@@ -94,7 +94,11 @@ class GameDataLoader:
         with open(recipe_json_path, 'r') as f:
             recipe_data = json.load(f)
 
-        entity_types = {EntityTypeID(k): EntityType(**v) for k, v in entity_data.items()}
+        # Ensure the 'type_id' value within each entity's dictionary is also an EntityTypeID
+        entity_types = {
+            EntityTypeID(k): EntityType(**{**v, 'type_id': EntityTypeID(v['type_id'])})
+            for k, v in entity_data.items()
+        }
         # For recipes, we need to handle nested RecipeIngredient items
         recipes = {}
         for recipe_id_str, recipe_dict in recipe_data.items():
