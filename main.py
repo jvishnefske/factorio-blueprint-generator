@@ -285,6 +285,7 @@ class BlueprintExporter:
                 name=entity_instance.entity_type_id,
                 position=DraftsmanPosition(x=entity_instance.position.x, y=entity_instance.position.y),
                 direction=entity_instance.direction.value,
+                similar_entities=None # Required by this specific draftsman version
             )
             if entity_instance.recipe_id:
                 new_entity.recipe = entity_instance.recipe_id
