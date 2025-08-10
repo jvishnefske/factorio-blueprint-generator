@@ -154,8 +154,9 @@ class StateManager:
 
 # --- MODULE 4: Fitness Evaluator ---
 class FitnessEvaluator:
-    def __init__(self, state_manager: StateManager):
+    def __init__(self, state_manager: StateManager, target_production: Dict[ItemID, float]):
         self.state_manager = state_manager
+        self.target_production = target_production
 
     def evaluate_footprint(self, state: BlueprintState) -> float:
         """Calculates the total area of the layout's bounding box."""
@@ -173,10 +174,18 @@ class FitnessEvaluator:
 
         return (max_x - min_x) * (max_y - min_y)
 
+    def evaluate_total_production_cost(self) -> float:
+        """Calculates a cost based on the total target production rate."""
+        return sum(self.target_production.values()) * 1000.0
+
     def evaluate(self, state: BlueprintState) -> float:
         """Calculates the total fitness score (lower is better)."""
         # Primary objective: minimize footprint. More objectives could be added here.
-        return self.evaluate_footprint(state)
+        footprint_cost = self.evaluate_footprint(state)
+        total_production_cost = self.evaluate_total_production_cost()
+        
+        # Combine objectives. Lower score is better.
+        return footprint_cost + total_production_cost
 
 # --- MODULE 5: Optimization Engine ---
 class SimulatedAnnealingOptimizer:
@@ -351,7 +360,7 @@ def main():
     # 3. Initialize Core Modules
     print("\n--- 3. Initializing Optimization Modules ---")
     state_manager = StateManager(entity_types)
-    fitness_evaluator = FitnessEvaluator(state_manager)
+    fitness_evaluator = FitnessEvaluator(state_manager, target_production) # Pass target_production here
     optimizer = SimulatedAnnealingOptimizer(
         state_manager=state_manager,
         fitness_evaluator=fitness_evaluator,

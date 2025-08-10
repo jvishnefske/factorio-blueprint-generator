@@ -221,7 +221,9 @@ def test_calculate_requirements_zero_production(production_calculator):
 # --- Tests for FitnessEvaluator ---
 @pytest.fixture
 def fitness_evaluator(state_manager):
-    return FitnessEvaluator(state_manager)
+    # Provide a dummy target_production for tests
+    dummy_target_production = {ItemID("iron-gear-wheel"): 5.0}
+    return FitnessEvaluator(state_manager, dummy_target_production)
 
 def test_evaluate_footprint_no_entities(fitness_evaluator):
     state = BlueprintState(entities=[])
@@ -270,14 +272,23 @@ def test_evaluate_footprint_multiple_entities_overlapping(fitness_evaluator):
     # Area = 3 * 3 = 9.0 (Same as a single 3x3 entity, as they are fully contained within it)
     assert fitness_evaluator.evaluate_footprint(state) == 9.0
 
-def test_evaluate_returns_footprint(fitness_evaluator):
+def test_evaluate_total_production_cost(fitness_evaluator):
+    # With dummy_target_production = {ItemID("iron-gear-wheel"): 5.0}
+    expected_cost = 5.0 * 1000.0
+    assert fitness_evaluator.evaluate_total_production_cost() == expected_cost
+
+def test_evaluate_returns_footprint_plus_production_cost(fitness_evaluator):
     entity = EntityInstance(
         entity_number=1,
         entity_type_id=EntityTypeID("assembling-machine-2"), # 3x3 size
         position=Position(x=0.0, y=0.0)
     )
     state = BlueprintState(entities=[entity])
-    assert fitness_evaluator.evaluate(state) == 9.0
+    footprint = fitness_evaluator.evaluate_footprint(state) # Should be 9.0
+    production_cost = fitness_evaluator.evaluate_total_production_cost() # Should be 5000.0
+    
+    assert fitness_evaluator.evaluate(state) == footprint + production_cost
+    assert fitness_evaluator.evaluate(state) == 9.0 + 5000.0
 
 def test_main():
     main.main()
