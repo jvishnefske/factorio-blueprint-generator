@@ -2,9 +2,16 @@ import json
 import math
 import random
 import copy
-from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Dict, Tuple, Optional, Union
 from enum import Enum
+
+# Import Pydantic models from the new models.py file
+from .models import (
+    AppBaseModel, Position, Size, Direction,
+    ItemID, EntityTypeID, RecipeID,
+    RecipeIngredient, EntityType, Recipe,
+    EntityInstance, LogisticLink, BlueprintState, OptimizationProblem
+)
 
 # Import the factorio-draftsman library for the final export step
 try:
@@ -21,64 +28,7 @@ except ImportError:
 # ==============================================================================
 # PART 1: PYDANTIC MODELS (The Core Data Interface)
 # ==============================================================================
-
-class AppBaseModel(BaseModel):
-    # Allow arbitrary types for custom string subclasses (ItemID, EntityTypeID, RecipeID)
-    # This is needed for Pydantic v2 to correctly handle these types in schema generation.
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-class Position(AppBaseModel):
-    x: float
-    y: float
-
-class Size(AppBaseModel):
-    width: int
-    height: int
-
-class Direction(int, Enum):
-    NORTH = 0
-    EAST = 2
-    SOUTH = 4
-    WEST = 6
-
-class ItemID(str): pass
-class EntityTypeID(str): pass
-class RecipeID(str): pass
-
-class RecipeIngredient(AppBaseModel):
-    item_id: ItemID
-    amount: float
-
-class EntityType(AppBaseModel):
-    type_id: EntityTypeID
-    size: Size
-    crafting_speed: Optional[float] = None
-    module_slots: int = 0
-    power_consumption_kw: float = 0
-    supply_area: Optional[Size] = None
-
-class Recipe(AppBaseModel):
-    recipe_id: RecipeID
-    ingredients: List[RecipeIngredient]
-    products: List[RecipeIngredient]
-    energy_required_seconds: float
-
-class EntityInstance(AppBaseModel):
-    entity_number: int
-    entity_type_id: EntityTypeID
-    position: Optional[Position] = None
-    direction: Direction = Direction.NORTH
-    recipe_id: Optional[RecipeID] = None
-
-class BlueprintState(AppBaseModel):
-    name: str = "Optimized Blueprint"
-    entities: List[EntityInstance] = Field(default_factory=list)
-
-class OptimizationProblem(AppBaseModel):
-    target_production: Dict[ItemID, float]
-    available_entity_types: Dict[EntityTypeID, EntityType]
-    available_recipes: Dict[RecipeID, Recipe]
-    initial_state: BlueprintState
+# Models are now in models.py
 
 
 # ==============================================================================

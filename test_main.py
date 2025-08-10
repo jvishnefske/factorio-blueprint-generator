@@ -8,6 +8,8 @@ from main import (
     StateManager,
     ProductionCalculator,
     FitnessEvaluator,
+)
+from models import (
     EntityType,
     Recipe,
     ItemID,
