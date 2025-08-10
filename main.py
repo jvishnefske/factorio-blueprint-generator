@@ -6,7 +6,7 @@ from typing import List, Dict, Tuple, Optional, Union
 from enum import Enum
 
 # Import Pydantic models from the new models.py file
-from .models import (
+from models import (
     AppBaseModel, Position, Size, Direction,
     ItemID, EntityTypeID, RecipeID,
     RecipeIngredient, EntityType, Recipe,
