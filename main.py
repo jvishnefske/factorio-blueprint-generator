@@ -280,17 +280,19 @@ class BlueprintExporter:
             if entity_instance.position is None:
                 continue
             
-            # Use blueprint.new_entity() to correctly instantiate and add the entity
-            # This method handles the underlying Entity.__init__ complexities.
-            new_entity_args = {
-                "name": entity_instance.entity_type_id,
-                "position": DraftsmanPosition(x=entity_instance.position.x, y=entity_instance.position.y),
-                "direction": entity_instance.direction.value,
-            }
+            # Create an Entity instance and append it to the blueprint's entities list
+            new_entity = Entity(
+                name=entity_instance.entity_type_id,
+                position=DraftsmanPosition(x=entity_instance.position.x, y=entity_instance.position.y),
+                direction=entity_instance.direction.value,
+            )
             if entity_instance.recipe_id:
-                new_entity_args["recipe"] = entity_instance.recipe_id
+                new_entity.recipe = entity_instance.recipe_id
             
-            blueprint.new_entity(**new_entity_args)
+            # The 'similar_entities' argument is typically handled by the library internally
+            # or is None for a new entity. Directly appending the created Entity object
+            # is the standard way to add entities to a blueprint in draftsman.
+            blueprint.entities.append(new_entity)
             
         return blueprint.to_string()
 
