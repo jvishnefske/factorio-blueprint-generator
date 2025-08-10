@@ -94,8 +94,25 @@ class GameDataLoader:
         with open(recipe_json_path, 'r') as f:
             recipe_data = json.load(f)
 
-        entity_types = {k: EntityType(**v) for k, v in entity_data.items()}
-        recipes = {k: Recipe(**v) for k, v in recipe_data.items()}
+        entity_types = {EntityTypeID(k): EntityType(**v) for k, v in entity_data.items()}
+        # For recipes, we need to handle nested RecipeIngredient items
+        recipes = {}
+        for recipe_id_str, recipe_dict in recipe_data.items():
+            ingredients = [
+                {'item_id': ItemID(ing['item_id']), 'amount': ing['amount']}
+                for ing in recipe_dict['ingredients']
+            ]
+            products = [
+                {'item_id': ItemID(prod['item_id']), 'amount': prod['amount']}
+                for prod in recipe_dict['products']
+            ]
+            recipes[RecipeID(recipe_id_str)] = Recipe(
+                recipe_id=RecipeID(recipe_id_str),
+                ingredients=ingredients,
+                products=products,
+                energy_required_seconds=recipe_dict['energy_required_seconds'],
+                category=recipe_dict.get('category', 'crafting') # Assuming 'crafting' as default if not specified
+            )
         return entity_types, recipes
 
 # --- MODULE 2: Production Calculator ---

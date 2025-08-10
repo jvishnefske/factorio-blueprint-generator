@@ -23,21 +23,21 @@ from main import (
 @pytest.fixture
 def dummy_entity_data():
     return {
-        "assembling-machine-2": {
-            "type_id": "assembling-machine-2",
+        EntityTypeID("assembling-machine-2"): {
+            "type_id": EntityTypeID("assembling-machine-2"),
             "size": {"width": 3, "height": 3},
             "crafting_speed": 0.75,
             "power_consumption_kw": 200,
             "module_slots": 2
         },
-        "substation": {
-            "type_id": "substation",
+        EntityTypeID("substation"): {
+            "type_id": EntityTypeID("substation"),
             "size": {"width": 2, "height": 2},
             "power_consumption_kw": 10,
             "supply_area": {"width": 18, "height": 18}
         },
-        "iron-furnace": {
-            "type_id": "iron-furnace",
+        EntityTypeID("iron-furnace"): {
+            "type_id": EntityTypeID("iron-furnace"),
             "size": {"width": 2, "height": 2},
             "crafting_speed": 1.0,
             "power_consumption_kw": 90
@@ -47,17 +47,19 @@ def dummy_entity_data():
 @pytest.fixture
 def dummy_recipe_data():
     return {
-        "iron-gear-wheel": {
-            "recipe_id": "iron-gear-wheel",
-            "ingredients": [{"item_id": "iron-plate", "amount": 2}],
-            "products": [{"item_id": "iron-gear-wheel", "amount": 1}],
-            "energy_required_seconds": 0.5
+        RecipeID("iron-gear-wheel"): {
+            "recipe_id": RecipeID("iron-gear-wheel"),
+            "ingredients": [{"item_id": ItemID("iron-plate"), "amount": 2}],
+            "products": [{"item_id": ItemID("iron-gear-wheel"), "amount": 1}],
+            "energy_required_seconds": 0.5,
+            "category": "crafting"
         },
-        "iron-plate": {
-            "recipe_id": "iron-plate",
-            "ingredients": [{"item_id": "iron-ore", "amount": 1}],
-            "products": [{"item_id": "iron-plate", "amount": 1}],
-            "energy_required_seconds": 3.2
+        RecipeID("iron-plate"): {
+            "recipe_id": RecipeID("iron-plate"),
+            "ingredients": [{"item_id": ItemID("iron-ore"), "amount": 1}],
+            "products": [{"item_id": ItemID("iron-plate"), "amount": 1}],
+            "energy_required_seconds": 3.2,
+            "category": "smelting"
         }
     }
 
@@ -90,7 +92,7 @@ def test_game_data_loader_loads_correctly(create_dummy_data_files):
 # --- Tests for StateManager ---
 @pytest.fixture
 def state_manager(dummy_entity_data):
-    # Convert dummy_entity_data to actual EntityType objects
+    # dummy_entity_data already returns EntityTypeID keys and EntityType value dicts with EntityTypeID
     entity_definitions = {k: EntityType(**v) for k, v in dummy_entity_data.items()}
     return StateManager(entity_definitions)
 
@@ -170,7 +172,9 @@ def test_is_state_valid_with_overlap(state_manager):
 # --- Tests for ProductionCalculator ---
 @pytest.fixture
 def production_calculator(dummy_entity_data, dummy_recipe_data):
+    # dummy_entity_data already returns EntityTypeID keys and EntityType value dicts with EntityTypeID
     entity_types = {k: EntityType(**v) for k, v in dummy_entity_data.items()}
+    # dummy_recipe_data already returns RecipeID keys and Recipe value dicts with RecipeID/ItemID
     recipes = {k: Recipe(**v) for k, v in dummy_recipe_data.items()}
     return ProductionCalculator(entity_types, recipes)
 
