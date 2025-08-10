@@ -273,3 +273,6 @@ def test_evaluate_returns_footprint(fitness_evaluator):
     )
     state = BlueprintState(entities=[entity])
     assert fitness_evaluator.evaluate(state) == 9.0
+
+def test_main():
+    main.main()
