@@ -16,4 +16,5 @@ factorio-draftsman = { git = "https://github.com/redruin1/factorio-draftsman" }
 [dependency-groups]
 dev = [
     "pytest>=8.4.1",
+    "pytest-cov>=6.0.0",
 ]

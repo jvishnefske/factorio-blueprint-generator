@@ -202,3 +202,7 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 .aider*
+
+# Runtime generated files
+entities.json
+recipes.json

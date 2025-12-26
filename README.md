@@ -1,34 +1,30 @@
-# Factorio Blueprint Optimizer ⚙️ (Work in Progress 🚧)
+# Factorio Blueprint Optimizer
 
-![Work in Progress](https://img.shields.io/badge/Status-Work%20in%20Progress-red)
-![Python](https://img.shields.io/badge/python-3.9+-blue.svg)
-![Factorio](https://img.shields.io/badge/Factorio-Optimized-orange)
+Optimize Factorio factory layouts using simulated annealing. Given a target production rate, this tool calculates the required machines and arranges them to minimize the overall footprint.
 
-This project aims to develop an optimizer for Factorio factory layouts using a simulated annealing approach.
+**Note:** Current output is for placement demonstration only - logistics (belts, inserters) are not yet included.
 
-**WARNING: Current blueprints are not functional!**
-At this stage, the generated blueprints are for demonstrating the core optimization loop (placement, overlap detection, footprint evaluation). They *do not* include any logistics (belts, inserters, pipes) and therefore will not function as a complete factory in Factorio. The next steps in development will focus on integrating logistic components and flow validation.
-
-## How to Run
-
-To run the main optimization script, use `uv run`:
+## Quick Start
 
 ```bash
+# Install dependencies
+uv sync
+
+# Run tests
+uv run pytest
+
+# Run optimizer
 uv run python main.py
 ```
 
-This will:
-1.  Load dummy game data (entities, recipes).
-2.  Calculate the required number of machines for a target production.
-3.  Randomly place these machines and then attempt to optimize their positions to minimize footprint and total production cost (currently a placeholder cost).
-4.  Export the resulting layout as a Factorio blueprint string (if `factorio-draftsman` is installed).
+## How It Works
 
-You can inspect the `main.py` file to see the hardcoded target production (e.g., `iron-gear-wheel`).
+1. Define target production (e.g., 5 iron gears/second)
+2. Calculator determines required machines
+3. Simulated annealing optimizes placement to minimize bounding box
+4. Export as Factorio blueprint string
 
-## Tests
+## Requirements
 
-To run the tests, use `uv run pytest`:
-
-```bash
-uv run pytest
-```
+- Python 3.12+
+- factorio-draftsman (for blueprint export)
